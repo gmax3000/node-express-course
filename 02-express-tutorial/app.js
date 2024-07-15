@@ -1,11 +1,20 @@
 const express = require('express'); // Importing Express
 const path = require('path'); // Importing Path module
 const { products } = require('./data'); // Importing products from data.js
+const peopleRouter = require('./routes/people'); // Importing peopleRouter
 
 const app = express(); // Creating an Express application
 
+// Logger middleware function
+const logger = (req, res, next) => {
+    console.log(`${req.method} ${req.url} ${new Date().toISOString()}`);
+    next(); // Call next() to pass control to the next middleware function or route handler
+};
+
+app.use(logger); // Using the logger middleware for all paths
+
 app.use(express.json()); // Middleware to parse JSON
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded data
+app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded data
 
 app.use(express.static(path.join(__dirname, 'public'))); // Serving static files from the "public" directory
 
@@ -51,6 +60,9 @@ app.get('/api/v1/query', (req, res) => {
     // Return the filtered products as JSON
     res.json(filteredProducts);
 });
+
+// Use the people router for /api/v1/people path
+app.use('/api/v1/people', peopleRouter);
 
 // "Not found" handler
 app.use((req, res, next) => {
