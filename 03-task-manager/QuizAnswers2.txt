@@ -1,0 +1,22 @@
+In Node.js and Express applications, handling asynchronous operations, especially with async/await, can lead to cleaner and more readable code. However, dealing with errors in asynchronous routes often requires a lot of repetitive try/catch blocks. To streamline this process, we create a middleware function called asyncWrapper that simplifies error handling in asynchronous routes.
+
+The asyncWrapper function wraps an asynchronous function and ensures that any errors are caught and passed to the error-handling middleware. This avoids the need for repetitive try/catch blocks in every route.
+
+const Task = require('../models/Task');
+const asyncWrapper = require('../middleware/async-wrapper');
+const CustomAPIError = require('../errors/custom-api-error');
+
+const getTask = asyncWrapper(async (req, res, next) => {  
+  const { id: taskID } = req.params;  
+  const task = await Task.findOne({ _id: taskID });  
+  
+  if (!task) {  
+    return next(new CustomAPIError('Task not found', 404));  
+  }  
+  
+  res.status(200).json({ task });  
+});
+
+module.exports = {
+  getTask,
+};
