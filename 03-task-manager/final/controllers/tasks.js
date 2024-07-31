@@ -7,6 +7,7 @@ const getAllTasks = asyncWrapper(async (req, res) => {
 })
 
 const createTask = asyncWrapper(async (req, res) => {
+  console.log("request body")
   const task = await Task.create(req.body)
   res.status(201).json({ task })
 })
