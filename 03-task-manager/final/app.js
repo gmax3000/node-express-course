@@ -17,11 +17,12 @@ app.use('/api/v1/tasks', tasks);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
+   await connectDB(process.env.MONGO_URI);
+  //  await connectDB("mongodb+srv://gmax3000:bowroh-cyfRi6-qamzis@cluster0.4ew6ezl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
